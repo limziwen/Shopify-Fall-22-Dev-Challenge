@@ -16,4 +16,4 @@ Viewing deleted items and restoring items ("/deletelist")
 ![image](https://user-images.githubusercontent.com/44370790/167876300-07bf9b02-c084-4031-80c9-5aa9f834534e.png)  
 
 List of all items  
-http://localhost:5000/list  
+![image](https://user-images.githubusercontent.com/44370790/167876721-2320d4df-571d-415f-b3b9-7d54e32a7711.png)
