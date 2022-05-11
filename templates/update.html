@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+   <body>
+   
+      <table border = 1>
+         <thead>
+            <td>Name</td>
+            <td>quantity</td>
+         </thead>
+         
+         {% for row in rows %}
+            <tr>
+               <td>{{row["name"]}}</td>
+               <td>{{row["quantity"]}}</td>	
+            </tr>
+         {% endfor %}
+      </table>
+      
+      {% if rows|length %}
+         <form action = "/updateItem"  method = "POST">
+            <b>Select item to update</b> <br>
+            <select name = "name" required>
+                  {% for row in rows %}
+                     <option value = '{{row["name"]}}'>{{row["name"]}}</option>
+                  {% endfor %}
+            </select>
+            <input type = "number" name = "quantity" placeholder = "1" required>
+            
+            <input type = "submit" value = "update" /> 
+         </form>
+
+         <form action = "/delete"  method = "POST">
+            <b>Select item to delete</b> <br>
+            <select name = "name" required>
+               {% for row in rows %}
+               <option value = '{{row["name"]}}'>{{row["name"]}}</option>
+               {% endfor %}
+            </select>
+            <input type = "text" name="comment">
+            <input type = "submit" value = "delete"/> 
+         </form>
+      {% else %}
+         <h3>No items in the list</h3>
+      {% endif %}     
+
+      
+      
+      
+      
+      <a href = "/">Go back to home page</a>
+      
+   </body>
+</html>

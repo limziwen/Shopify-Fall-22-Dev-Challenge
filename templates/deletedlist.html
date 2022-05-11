@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+   <body>
+   
+      <table border = 1>
+         <thead>
+            <td>Name</td>
+            <td>Quantity</td>
+            <td>Comments</td>
+         </thead>
+         
+         {% for row in rows %}
+            <tr>
+               <td>{{row["name"]}}</td>
+               <td>{{row["quantity"]}}</td>	
+               <td>{{row["deletionComments"]}}</td>
+            </tr>
+         {% endfor %}
+      </table>
+      
+      <a href = "/">Go back to home page</a>
+      
+   </body>
+   {% if rows|length %}
+        <form action = "/restore"  method = "POST">
+        <b>Select item to restore</b> <br>
+        <select name = "name" required>
+        {% for row in rows %}
+            <option value = '{{row["name"]}}'>{{row["name"]}}</option>
+        {% endfor %}
+      </select>
+      <input type = "submit"/> 
+   {%endif%}
+   
+</html>
