@@ -1,0 +1,3 @@
+*.db
+shopify_env/
+__pycache__/
