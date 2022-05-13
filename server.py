@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, send_from_directory
 import sqlite3 as sql
-import csv
 from initDb import createDb
 
 app = Flask(__name__)
 
+#returns the home page, where user can input items
 @app.route('/')
 def home():
    return render_template('home.html')
@@ -12,13 +12,18 @@ def home():
 #returns all valid objects in inventory
 @app.route('/update')
 def update():
-   con = sql.connect("database.db")
-   con.row_factory = sql.Row
-   
-   cur = con.cursor()
-   cur.execute("select * from items where visible = 1")
-   con.commit()
-   rows = cur.fetchall()
+   try:
+      con = sql.connect("database.db")
+      con.row_factory = sql.Row
+      cur = con.cursor()
+      cur.execute("select * from items where visible = 1")
+      con.commit()
+      rows = cur.fetchall()
+   except Exception as e:
+      return render_template('errorpage.html', errorMsg = str(e))
+   finally:
+      con.close()
+
    return render_template('update.html', rows = rows)
 
 #updates singular item in database
@@ -38,9 +43,8 @@ def updateItem():
          row = cur.fetchone()
 
          if row is None:
-            print("Cannot update no item found")
+            return render_template('errorpage.html', errorMsg = "Item not found")
          else:
-            print("2nd sql statement")
             cur.execute("update items set quantity = ? where name = ?", (quantity, name,))    
             con.commit()
       except Exception as e:
@@ -90,36 +94,27 @@ def insert():
             cur.execute("insert into items(name,quantity,visible,deletionComments) values(?,?,?,?)", (name, quantity, 1, ""))
             con.commit()
       except Exception as e:
-         # print("failed here: ", e)
-         # con.rollback()
          return render_template('errorpage.html', errorMsg = str(e))
       finally:
          con.close()
    
    return update()
 
-#display all item into database
-@app.route('/list')
-def list():
-   con = sql.connect("database.db")
-   con.row_factory = sql.Row
-   
-   cur = con.cursor()
-   cur.execute("select * from items where visible = 1")
-   con.commit()
-   rows = cur.fetchall()
-   return render_template("list.html",rows = rows)
-
 #display all items in database with visible = 0
 @app.route("/deletelist")
 def deletelist():
-   con = sql.connect("database.db")
-   con.row_factory = sql.Row
-   
-   cur = con.cursor()
-   cur.execute("select * from items where visible = 0")
-   con.commit()
-   rows = cur.fetchall()
+   try:
+      con = sql.connect("database.db")
+      con.row_factory = sql.Row
+      cur = con.cursor()
+      cur.execute("select * from items where visible = 0")
+      con.commit()
+      rows = cur.fetchall()
+   except Exception as e:
+      return render_template('errorpage.html', errorMsg = str(e))
+   finally:
+      con.close()
+
    return render_template("deletedlist.html",rows = rows)
 
 #update visible to 1 for recieving item
@@ -136,7 +131,7 @@ def restoreItem():
          con.commit()
          row = cur.fetchone()
          if row is None:
-            print("Cannot restore no item found")
+            return render_template('errorpage.html', errorMsg = "item cannot be restored, not found")
          else:
             cur.execute("update items set visible = 1 where name = ?", (name,))
             con.commit()
@@ -151,5 +146,7 @@ if __name__ == '__main__':
    app.run(debug = True)
 
 
-
-
+# Notes on code:
+# Query parameters to prevent sql injections.
+# try/except block to catch any errors that may occur, including database errors (duplicate item entries, connection failures, etc.)
+# finally block to close the connection to the database.
