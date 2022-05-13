@@ -35,18 +35,11 @@ def updateItem():
          quantity = request.form['quantity']
          con = sql.connect("database.db")
          con.row_factory = sql.Row
-         
          cur = con.cursor()
          # prevent sql injections using query parameters
-         cur.execute("select * from items where name=?", (name,))
+         cur.execute("update items set quantity = ? where name = ?", (quantity, name,))  
          con.commit()
-         row = cur.fetchone()
 
-         if row is None:
-            return render_template('errorpage.html', errorMsg = "Item not found")
-         else:
-            cur.execute("update items set quantity = ? where name = ?", (quantity, name,))    
-            con.commit()
       except Exception as e:
          return render_template('errorpage.html', errorMsg = str(e))
       finally:
@@ -62,17 +55,10 @@ def delete():
          comment = request.form['comment']
          con = sql.connect("database.db")
          con.row_factory = sql.Row
-         
          cur = con.cursor()
-         cur.execute("select * from items where name=?", (name,))
+         cur.execute("update items set visible = 0, deletionComments = ? where name = ?", (comment, name,))
          con.commit()
-         row = cur.fetchone()
 
-         if row is None:
-            return render_template('error.html', message = "Item not found")
-         else:
-            cur.execute("update items set visible = 0, deletionComments = ? where name = ?", (comment, name,))
-            con.commit()
       except Exception as e:
          print(e)
          return render_template('errorpage.html', errorMsg = str(e))
@@ -84,7 +70,6 @@ def delete():
 @app.route('/insert',methods = ['POST', 'GET'])
 def insert():
    if request.method == 'POST':
-      print("recieved ", request.form)
       try:
          name = request.form['name']
          quantity = request.form['quantity']
@@ -125,16 +110,9 @@ def restoreItem():
          name = request.form['name']
          con = sql.connect("database.db")
          con.row_factory = sql.Row
-         
          cur = con.cursor()
-         cur.execute("select * from items where name = ?", (name,))
+         cur.execute("update items set visible = 1 where name = ?", (name,))
          con.commit()
-         row = cur.fetchone()
-         if row is None:
-            return render_template('errorpage.html', errorMsg = "item cannot be restored, not found")
-         else:
-            cur.execute("update items set visible = 1 where name = ?", (name,))
-            con.commit()
       except Exception as e:
          return render_template('errorpage.html', errorMsg = str(e))
       finally:
