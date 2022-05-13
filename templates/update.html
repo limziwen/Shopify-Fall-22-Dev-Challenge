@@ -1,21 +1,6 @@
 <!doctype html>
 <html>
-   <body>
-   
-      <table border = 1>
-         <thead>
-            <td>Name</td>
-            <td>quantity</td>
-         </thead>
-         
-         {% for row in rows %}
-            <tr>
-               <td>{{row["name"]}}</td>
-               <td>{{row["quantity"]}}</td>	
-            </tr>
-         {% endfor %}
-      </table>
-      
+   <body>   
       {% if rows|length %}
          <form action = "/updateItem"  method = "POST">
             <b>Select item to update</b> <br>
@@ -36,14 +21,26 @@
                <option value = '{{row["name"]}}'>{{row["name"]}}</option>
                {% endfor %}
             </select>
-            <input type = "text" name="comment">
+            <input type = "text" name="comment" placeholder="Deletion comments...">
             <input type = "submit" value = "delete"/> 
          </form>
       {% else %}
          <h3>No items in the list</h3>
       {% endif %}     
-
-      
+      <br>
+      <table border = 1>
+         <thead>
+            <td>Name</td>
+            <td>quantity</td>
+         </thead>
+         
+         {% for row in rows %}
+            <tr>
+               <td>{{row["name"]}}</td>
+               <td>{{row["quantity"]}}</td>	
+            </tr>
+         {% endfor %}
+      </table>
       
       
       

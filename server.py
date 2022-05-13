@@ -17,7 +17,7 @@ def update():
    
    cur = con.cursor()
    cur.execute("select * from items where visible = 1")
-   
+   con.commit()
    rows = cur.fetchall()
    return render_template('update.html', rows = rows)
 
@@ -32,19 +32,22 @@ def updateItem():
          con.row_factory = sql.Row
          
          cur = con.cursor()
-         cur.execute("select * from items where name = ?", (name,))
+         # prevent sql injections using query parameters
+         cur.execute("select * from items where name=?", (name,))
+         con.commit()
          row = cur.fetchone()
+
          if row is None:
-            return render_template('error.html', message = "Item not found")
+            print("Cannot update no item found")
          else:
-            cur.execute("update items set quantity = ? where name = ?", (quantity, name))
+            print("2nd sql statement")
+            cur.execute("update items set quantity = ? where name = ?", (quantity, name,))    
             con.commit()
-            return render_template('success.html')
       except Exception as e:
-         return render_template('error.html', message = str(e))
+         return render_template('errorpage.html', errorMsg = str(e))
       finally:
          con.close()
-         return update()
+   return update()
 
 #deletes single item from database
 @app.route('/delete', methods = ['POST'])
@@ -57,38 +60,43 @@ def delete():
          con.row_factory = sql.Row
          
          cur = con.cursor()
-         cur.execute("select * from items where name = ?", (name,))
+         cur.execute("select * from items where name=?", (name,))
+         con.commit()
          row = cur.fetchone()
+
          if row is None:
             return render_template('error.html', message = "Item not found")
          else:
             cur.execute("update items set visible = 0, deletionComments = ? where name = ?", (comment, name,))
             con.commit()
-            return render_template('success.html')
       except Exception as e:
-         return render_template('error.html', message = str(e))
+         print(e)
+         return render_template('errorpage.html', errorMsg = str(e))
       finally:
          con.close()
-         return update()
+   return update()
 
 #insert item into database
 @app.route('/insert',methods = ['POST', 'GET'])
 def insert():
    if request.method == 'POST':
+      print("recieved ", request.form)
       try:
          name = request.form['name']
          quantity = request.form['quantity']
-         
          with sql.connect("database.db") as con:
             cur = con.cursor()
-            cur.execute("insert into items(name,quantity,visible) values(?,?,1)",(name,quantity) )
+            #prevent sql injections using query parameters
+            cur.execute("insert into items(name,quantity,visible,deletionComments) values(?,?,?,?)", (name, quantity, 1, ""))
             con.commit()
-      except:
-         con.rollback()
-      
+      except Exception as e:
+         # print("failed here: ", e)
+         # con.rollback()
+         return render_template('errorpage.html', errorMsg = str(e))
       finally:
-         return list()
          con.close()
+   
+   return update()
 
 #display all item into database
 @app.route('/list')
@@ -98,7 +106,7 @@ def list():
    
    cur = con.cursor()
    cur.execute("select * from items where visible = 1")
-   
+   con.commit()
    rows = cur.fetchall()
    return render_template("list.html",rows = rows)
 
@@ -110,7 +118,7 @@ def deletelist():
    
    cur = con.cursor()
    cur.execute("select * from items where visible = 0")
-   
+   con.commit()
    rows = cur.fetchall()
    return render_template("deletedlist.html",rows = rows)
 
@@ -125,18 +133,18 @@ def restoreItem():
          
          cur = con.cursor()
          cur.execute("select * from items where name = ?", (name,))
+         con.commit()
          row = cur.fetchone()
          if row is None:
-            return render_template('error.html', message = "Item not found")
+            print("Cannot restore no item found")
          else:
             cur.execute("update items set visible = 1 where name = ?", (name,))
             con.commit()
-            return render_template('success.html')
       except Exception as e:
-         return render_template('error.html', message = str(e))
+         return render_template('errorpage.html', errorMsg = str(e))
       finally:
          con.close()
-         return update()
+   return update()
 
 if __name__ == '__main__':
    createDb()
