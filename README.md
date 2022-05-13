@@ -15,4 +15,6 @@ Updating Deleting an Viewing (list of all items) ("/update")
 Viewing deleted items and restoring items ("/deletelist")  
 ![image](https://user-images.githubusercontent.com/44370790/168290626-2baf53f2-bb4c-4a3a-8032-4091d8847526.png) 
 
+In the event of an error, e.g duplicate items , this page will display an error
+![image](https://user-images.githubusercontent.com/44370790/168293747-789f8d3e-259f-488f-82b7-3dea776ff216.png)
 
