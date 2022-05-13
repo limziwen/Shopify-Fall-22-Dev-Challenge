@@ -121,7 +121,7 @@ def restoreItem():
 
 if __name__ == '__main__':
    createDb()
-   app.run(debug = True)
+   app.run(host='0.0.0.0', port=8080)
 
 
 # Notes on code:
