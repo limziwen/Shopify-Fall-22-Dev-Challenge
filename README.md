@@ -6,14 +6,13 @@
 
 **Screenshots of application**
 
-Adding an item ("/")  
-![image](https://user-images.githubusercontent.com/44370790/167876009-47f6e4ac-0298-487d-b4b7-f2b46e393107.png)  
+Adding an item to inventory ("/")  
+![image](https://user-images.githubusercontent.com/44370790/168290434-e27846cf-35de-4538-8dad-04ea20aa0f18.png)
 
-Updating and Deleting an item ("/update")  
-![image](https://user-images.githubusercontent.com/44370790/167876161-8462cb0f-e0d8-487c-9cb8-4cfafa1ba2e0.png)  
+Updating Deleting an Viewing (list of all items) ("/update")  
+![image](https://user-images.githubusercontent.com/44370790/168290470-721adbe3-24f9-4156-abcf-1a81bce7fbe7.png)
 
 Viewing deleted items and restoring items ("/deletelist")  
-![image](https://user-images.githubusercontent.com/44370790/167876300-07bf9b02-c084-4031-80c9-5aa9f834534e.png)  
+![image](https://user-images.githubusercontent.com/44370790/168290626-2baf53f2-bb4c-4a3a-8032-4091d8847526.png) 
 
-List of all items  
-![image](https://user-images.githubusercontent.com/44370790/167876721-2320d4df-571d-415f-b3b9-7d54e32a7711.png)
+
