@@ -4,6 +4,11 @@
 2. Run ```python server.py```. This runs the flask server.
 3. Search http://localhost:5000/ in your browser.
 
+**Video demo of app**
+https://user-images.githubusercontent.com/44370790/168296179-71836504-1968-4d65-b88f-b68e9c1b9db6.mp4
+
+
+
 **Screenshots of application**
 
 Adding an item to inventory ("/")  
@@ -17,4 +22,3 @@ Viewing deleted items and restoring items ("/deletelist")
 
 In the event of an error, e.g duplicate items , this page will display an error
 ![image](https://user-images.githubusercontent.com/44370790/168293747-789f8d3e-259f-488f-82b7-3dea776ff216.png)
-
